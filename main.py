@@ -1,6 +1,9 @@
 import pygame
 import random
 pygame.init()
+pygame.font.init()
+
+my_font = pygame.font.SysFont('Comic Sans MS', 30)
 
 screen = pygame.display.set_mode((1280,720))
 clock = pygame.time.Clock()
@@ -48,7 +51,10 @@ while running:
     food.rect.center = food.pos
     screen.blit(fish.image, player_pos)
     fish.rect.center = player_pos
+    text_surface = my_font.render(str(foodTotal), False, (0,0,0))
+    screen.blit(text_surface, (0,0))
     
+
     if pygame.sprite.collide_rect(fish,food): #checks for collision with fish food
         foodTotal += 1
         food.pos = pygame.Vector2(random.randint(0, screen.get_width()), random.randint(0, screen.get_height()))
