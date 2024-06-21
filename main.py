@@ -38,6 +38,9 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.transform.scale(self.image, (screen.get_width()/10,screen.get_height()/10))
         self.rect = self.image.get_rect()
         self.rect.size = self.image.get_size()
+    
+    def flip(self):
+        self.image = pygame.transform.flip(self.image, True, False)
 
 class Food(pygame.sprite.Sprite):
     def __init__(self):
@@ -54,6 +57,7 @@ fish = Player()
 food = Food()
 
 foodTotal = 0
+heading_x = True # True if the fish in heading in the x-positive direciton
 
 while running:
     for event in pygame.event.get():
@@ -82,8 +86,14 @@ while running:
         player_pos.y += 300 * dt
     if keys[pygame.K_d]:
         player_pos.x += 300 * dt
+        if heading_x == False: #Flips fish image when changing direction
+            heading_x = True
+            fish.flip()
     if keys[pygame.K_a]:
         player_pos.x -= 300 * dt
+        if heading_x == True: #Flips fish image when changing direction
+            heading_x = False
+            fish.flip()
     
 
 
