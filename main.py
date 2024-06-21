@@ -2,13 +2,33 @@ import pygame
 
 pygame.init()
 
-screen = pygame.display.set_mode((512,512))
+screen = pygame.display.set_mode((1280,720))
 clock = pygame.time.Clock()
 running = True
 dt = 0
 
 player_pos = pygame.Vector2(screen.get_width() / 2 , screen.get_height() / 2) 
 
+class Player(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+
+        
+        self.image = pygame.image.load('assets/fish.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (screen.get_width()/10,screen.get_height()/10))
+        self.rect = self.image.get_rect()
+
+class Food(pygame.sprite.Sprite):
+    def __init__(self):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = pygame.image.load('assets/food.png').convert_alpha()
+        self.image = pygame.transform.scale(self.image, (screen.get_width()/10,screen.get_height()/10))
+        self.rect = self.image.get_rect()
+
+
+fish = Player()
+food = Food()
 
 while running:
     for event in pygame.event.get():
@@ -19,8 +39,11 @@ while running:
     screen.fill("darkgreen")
     player_sprite = pygame.Rect(50, 50, 25, 25)
     player_sprite.center = player_pos
-    pygame.draw.rect(screen, "brown", player_sprite)
-
+    screen.blit(food.image, pygame.Vector2(screen.get_width() / 4 , screen.get_height() / 4) )
+    screen.blit(fish.image, player_pos)
+    
+    if pygame.sprite.collide_rect(fish,food): #checks for collision with fish food
+        print("collided")
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
         player_pos.y -= 300 * dt
