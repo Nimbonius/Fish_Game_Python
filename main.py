@@ -33,6 +33,8 @@ class Food(pygame.sprite.Sprite):
 fish = Player()
 food = Food()
 
+foodTotal = 0
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -48,7 +50,7 @@ while running:
     fish.rect.center = player_pos
     
     if pygame.sprite.collide_rect(fish,food): #checks for collision with fish food
-        print("collided")
+        foodTotal += 1
         food.pos = pygame.Vector2(random.randint(0, screen.get_width()), random.randint(0, screen.get_height()))
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
