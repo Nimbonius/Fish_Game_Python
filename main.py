@@ -1,4 +1,5 @@
 import pygame
+import pickle
 import random
 import os
 from os.path import abspath, dirname
@@ -83,22 +84,56 @@ class Button():
 
 fish = Player()
 food = Food()
+saveData = None
 foodIncrement = 1
 exponentialUpgrades = 0
 linearUpgrades = 0
+foodTotal = 0
 linearIncrement = 1
 foodPrice = 10
 foodPriceExponential = 100
+
+try: #saveData = [foodIncrement, exponentialUpgrades, linearUpgrades, foodTotal, linearIncrement, foodPrice, foodPriceExponential]
+    with open('saveData.pickle', "rb") as F:
+        saveData = pickle.load(F)
+    foodIncrement = saveData[0]
+    exponentialUpgrades = saveData[1]
+    linearUpgrades = saveData[2]
+    foodTotal = saveData[3]
+    linearIncrement = saveData[4]
+    foodPrice = saveData[5]
+    foodPriceExponential = saveData[6]
+except:
+    saveData = None
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 upgradeLinearButton = Button((50,50), [(screen.get_width()/2)-65, screen.get_height()], "Upgrade", "Price: ")
 upgradeExponetialButton = Button((50,50), [(screen.get_width()/2)+70, screen.get_height()], "Upgrade^2", "Price: ")
 
-foodTotal = 0
+
+
+
 heading_x = True # True if the fish in heading in the x-positive direciton
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+            with open('saveData.pickle', 'wb') as F:
+                saveData = [foodIncrement, exponentialUpgrades, linearUpgrades, foodTotal, linearIncrement, foodPrice, foodPriceExponential]
+                pickle.dump(saveData, F)
         if event.type == pygame.MOUSEBUTTONDOWN and pygame.BUTTON_LEFT:
             if upgradeLinearButton.rect.collidepoint(pygame.mouse.get_pos()): #Linear Upgrade Button
                 if foodTotal >= foodPrice:
