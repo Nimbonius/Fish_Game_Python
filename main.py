@@ -107,10 +107,12 @@ while running:
     food.rect.center = food.pos
     screen.blit(fish.image, checkScreenPosition(player_pos, fish.rect))
     fish.rect.center = player_pos
-    text_surface = my_font.render(str(foodTotal), False, (0,0,0))
 
     # Text
-    screen.blit(text_surface, (0,0))
+    total_text = my_font.render("Total Food: " + str(foodTotal), False, (0,0,0))
+    increment_text = my_font.render("Food Increment: " + str(foodIncrement),False, (0,0,0))
+    screen.blit(total_text, (0,0))
+    screen.blit(increment_text, (0, 0 + total_text.get_height()))
 
     
     
