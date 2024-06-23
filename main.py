@@ -1,5 +1,8 @@
 import pygame
 import random
+import os
+from os.path import abspath, dirname
+os.chdir(dirname(abspath(__file__))) #Launches file from its parent directory
 pygame.init()
 pygame.font.init()
 
@@ -140,3 +143,5 @@ while running:
 
 
 pygame.quit()
+
+
