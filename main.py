@@ -84,9 +84,13 @@ class Button():
 fish = Player()
 food = Food()
 foodIncrement = 1
+exponentialUpgrades = 0
+linearUpgrades = 0
+linearIncrement = 1
 foodPrice = 10
-upgradeLinearButton = Button((50,50), [screen.get_width()/2, screen.get_height()], "Upgrade", "Price: ")
-upgradeExponetialButton = None
+foodPriceExponential = 100
+upgradeLinearButton = Button((50,50), [(screen.get_width()/2)-65, screen.get_height()], "Upgrade", "Price: ")
+upgradeExponetialButton = Button((50,50), [(screen.get_width()/2)+70, screen.get_height()], "Upgrade^2", "Price: ")
 
 foodTotal = 0
 heading_x = True # True if the fish in heading in the x-positive direciton
@@ -96,12 +100,20 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN and pygame.BUTTON_LEFT:
-            if upgradeLinearButton.rect.collidepoint(pygame.mouse.get_pos()):
+            if upgradeLinearButton.rect.collidepoint(pygame.mouse.get_pos()): #Linear Upgrade Button
                 if foodTotal >= foodPrice:
                     foodTotal -= foodPrice
-                    foodIncrement += 1
-                    foodPrice = foodIncrement*foodIncrement + 10
+                    linearUpgrades += 1
+                    foodIncrement += linearIncrement
+                    foodPrice = linearUpgrades*linearUpgrades + 10
                     print(foodTotal, foodIncrement, foodPrice)
+            if upgradeExponetialButton.rect.collidepoint(pygame.mouse.get_pos()): #Exponential Upgrade Button
+                if foodTotal >= foodPriceExponential:
+                    foodTotal -= foodPriceExponential
+                    exponentialUpgrades += 1
+                    foodIncrement *= 2
+                    linearIncrement *= 2
+                    foodPriceExponential = 1000*(2**exponentialUpgrades)
                     
 
     
@@ -110,6 +122,7 @@ while running:
     # Buttons
 
     upgradeLinearButton.render(None, "Price: "+str(foodPrice)) 
+    upgradeExponetialButton.render(None, "Price: "+str(foodPriceExponential))
 
     #Sprites
 
