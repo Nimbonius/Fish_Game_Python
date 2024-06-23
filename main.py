@@ -6,7 +6,8 @@ os.chdir(dirname(abspath(__file__))) #Launches file from its parent directory
 pygame.init()
 pygame.font.init()
 
-my_font = pygame.font.SysFont('Comic Sans MS', 30)
+mainFont = pygame.font.SysFont('Comic Sans MS', 30)
+smallFont = pygame.font.SysFont('Comis Sans MS', 15)
 
 screen = pygame.display.set_mode((1280/2,720/2))
 clock = pygame.time.Clock()
@@ -56,15 +57,25 @@ class Food(pygame.sprite.Sprite):
         self.pos = pygame.Vector2(random.randint(0, screen.get_width()), random.randint(0, screen.get_height()))
 
 class Button():
-    def __init__(self, rect_size, rect_pos, text):
+    def __init__(self, rect_size, rect_pos, text, subtext):
         #self.rect = pygame.Rect(rect_pos[0], rect_pos[1], rect_size[0], rect_size[1])
-        self.text = my_font.render(str(text), False, (0,0,0))
-        self.rect = self.text.get_rect()
+        self.text = mainFont.render(str(text), False, (0,0,0))
+        self.subtext = smallFont.render(str(subtext), False, (0,0,0))
+        self.rect = pygame.Rect((self.text.get_rect().width + self.subtext.get_rect().width), (self.text.get_rect().height + self.subtext.get_rect().height), (self.text.get_rect().width + self.subtext.get_rect().width), (self.text.get_rect().height + self.subtext.get_rect().height))
+        print(self.text.get_width(), self.subtext.get_width())
+        if self.text.get_rect().width >= self.subtext.get_rect().width: #Fixes width of button based on the largest text
+            self.rect.width = self.text.get_width()
         self.rect.center = checkScreenPosition(rect_pos, self.rect)
 
-    def render(self):
+    def render(self, text, subtext):
+        if text:
+            self.text = mainFont.render(str(text), False, (0,0,0))
+        if subtext:
+            self.subtext = smallFont.render(str(subtext), False, (0,0,0)) 
         self.rendered_rect = pygame.draw.rect(screen, (255,0,0), self.rect)
+        #pygame.draw.rect(screen, (255,0,0), self.subtext.get_rect())
         screen.blit(self.text, (self.rect.x, self.rect.y))
+        screen.blit(self.subtext, (self.rect.x, self.rect.y))
     
     
         
@@ -74,7 +85,8 @@ fish = Player()
 food = Food()
 foodIncrement = 1
 foodPrice = 10
-upgradeButton = Button((50,50), [screen.get_width()/2, screen.get_height()], "Upgrade")
+upgradeLinearButton = Button((50,50), [screen.get_width()/2, screen.get_height()], "Upgrade", "Price: ")
+upgradeExponetialButton = None
 
 foodTotal = 0
 heading_x = True # True if the fish in heading in the x-positive direciton
@@ -84,7 +96,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
         if event.type == pygame.MOUSEBUTTONDOWN and pygame.BUTTON_LEFT:
-            if upgradeButton.rect.collidepoint(pygame.mouse.get_pos()):
+            if upgradeLinearButton.rect.collidepoint(pygame.mouse.get_pos()):
                 if foodTotal >= foodPrice:
                     foodTotal -= foodPrice
                     foodIncrement += 1
@@ -97,7 +109,7 @@ while running:
 
     # Buttons
 
-    upgradeButton.render() 
+    upgradeLinearButton.render(None, "Price: "+str(foodPrice)) 
 
     #Sprites
 
@@ -109,8 +121,8 @@ while running:
     fish.rect.center = player_pos
 
     # Text
-    total_text = my_font.render("Total Food: " + str(foodTotal), False, (0,0,0))
-    increment_text = my_font.render("Food Increment: " + str(foodIncrement),False, (0,0,0))
+    total_text = mainFont.render("Total Food: " + str(foodTotal), False, (0,0,0))
+    increment_text = mainFont.render("Food Increment: " + str(foodIncrement),False, (0,0,0))
     screen.blit(total_text, (0,0))
     screen.blit(increment_text, (0, 0 + total_text.get_height()))
 
