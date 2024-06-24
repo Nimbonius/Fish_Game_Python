@@ -152,7 +152,7 @@ while running:
                     
 
     
-    screen.fill("blue")
+    screen.fill((18, 18, 54 ))
 
     # Buttons
 
