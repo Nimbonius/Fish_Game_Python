@@ -10,7 +10,7 @@ pygame.font.init()
 mainFont = pygame.font.SysFont('Comic Sans MS', 30)
 smallFont = pygame.font.SysFont('Comis Sans MS', 15)
 
-screen = pygame.display.set_mode((1280,720))
+screen = pygame.display.set_mode((1280,720), pygame.RESIZABLE)
 clock = pygame.time.Clock()
 running = True
 dt = 0
